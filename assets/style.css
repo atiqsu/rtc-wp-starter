@@ -1,0 +1,100 @@
+.rtc-contributors-box {
+	margin-top: 30px;
+	padding: 20px;
+	border: 1px solid #e0e0e0;
+	background-color: #f9f9f9;
+	border-radius: 4px;
+	clear: both; /* Ensure it clears floats if any */
+	overflow: hidden; /* Contain floats */
+}
+
+.rtc-contributors-box h3 {
+	margin-top: 0;
+	margin-bottom: 15px;
+	font-size: 1.2em;
+	border-bottom: 1px solid #e0e0e0;
+	padding-bottom: 10px;
+}
+
+.rtc-contributors-box ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.rtc-contributors-box li {
+	margin-bottom: 15px;
+	padding-bottom: 15px;
+	border-bottom: 1px dotted #ccc;
+	display: flex; /* Use flexbox for layout */
+	align-items: center; /* Vertically align items */
+	flex-wrap: wrap; /* Allow wrapping on small screens */
+}
+
+.rtc-contributors-box li:last-child {
+	margin-bottom: 0;
+	padding-bottom: 0;
+	border-bottom: none;
+}
+
+.rtc-contributors-box .contributor-avatar {
+	margin-right: 15px;
+	flex-shrink: 0; /* Prevent avatar from shrinking */
+}
+
+.rtc-contributors-box .contributor-avatar img {
+	border-radius: 50%; /* Make avatar circular */
+	display: block;
+}
+
+.rtc-contributors-box .contributor-info {
+	flex-grow: 1; /* Allow info section to take remaining space */
+}
+
+.rtc-contributors-box .contributor-name {
+	font-weight: bold;
+	text-decoration: none;
+	color: #333;
+	display: block; /* Ensure link takes full width if needed */
+	margin-bottom: 5px; /* Space below name */
+}
+
+.rtc-contributors-box .contributor-name:hover {
+	text-decoration: underline;
+	color: #0073aa; /* WordPress blue */
+}
+
+/* Responsive Adjustments */
+@media (max-width: 600px) {
+	.rtc-contributors-box {
+		padding: 15px;
+	}
+
+	.rtc-contributors-box li {
+		/* Stack avatar and info vertically on small screens */
+		/* flex-direction: column;
+		align-items: flex-start; */ /* Optional: align left if stacking */
+	}
+
+	.rtc-contributors-box .contributor-avatar {
+		/* margin-right: 0;
+		margin-bottom: 10px; */ /* Adjust spacing if stacking */
+	}
+}
+
+/* Admin Metabox list basic style (optional, relies mostly on core styles) */
+.rtc-contributors-list ul {
+	margin: 0;
+	padding: 0;
+}
+
+.rtc-contributors-list li {
+	margin: 0 0 5px 0;
+	padding: 0;
+	list-style: none;
+}
+
+.rtc-contributors-list label {
+	display: block; /* Ensure labels take full width for easier clicking */
+	padding: 2px 0;
+}
