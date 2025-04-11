@@ -117,6 +117,11 @@ class Metabox {
 
 		if ( ! empty( $sanitized_ids ) ) {
 			update_post_meta( $post_id, self::CONTRIBUTORS_META_KEY, $sanitized_ids );
+
+			foreach ( $sanitized_ids as $idd ) {
+				$cache_key = 'cache_contributors_for_author_' . $idd;
+				wp_cache_delete( $cache_key, 'cached_contributors' );
+			}
 		} else {
 			delete_post_meta( $post_id, self::CONTRIBUTORS_META_KEY );
 		}
