@@ -2,7 +2,7 @@
 
 /**
  * Plugin Name: rtCamp WordPress assignment
- * Description: Basic plugin for allowing users to select multiple contributors for a post and displays them.
+ * Description: Basic plugin for allowing users to select multiple contributors for a post and displays them in the single post page. Also show all contributed posts in author archive page.
  * Plugin URI:
  * Author: atiqsu
  * Version: 1.0.0
