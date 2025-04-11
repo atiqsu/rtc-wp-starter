@@ -1,0 +1,3 @@
+.circleci/config.yml
+bin/install-wp-tests.sh
+.phpcs.xml.dist
