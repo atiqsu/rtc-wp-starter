@@ -13,27 +13,34 @@
 class ContributorsTest extends WP_UnitTestCase {
 
 
-    public function setUp(): void {
-        parent::setUp();
-    }
+	/**
+	 * Unit test setup.
+	 */
+	public function setUp(): void {
+		parent::setUp();
+
+		require_once plugin_dir_path( __FILE__ ) . '../class-metabox.php';
+		require_once plugin_dir_path( __FILE__ ) . '../class-contributor.php';
+		require_once plugin_dir_path( __FILE__ ) . './class-testablecontributor.php';
+	}
 
 
 	/**
 	 * Test for checking if contributors are properly saving.
 	 */
 	public function test_metabox_contributors_saved() {
-		$user1 = $this->factory->user->create_and_get( array( 'role' => 'author' ) );
-		$user2 = $this->factory->user->create_and_get( array( 'role' => 'author' ) );
+		$user1 = $this->factory()->user->create_and_get( array( 'role' => 'author' ) );
+		$user2 = $this->factory()->user->create_and_get( array( 'role' => 'author' ) );
 
-		$post_id = $this->factory->post->create(
+		$post_id = $this->factory()->post->create(
 			array(
-				'post_title'  => 'Multi Author Post',
-				'post_content'  => 'Content for multi author test',
-				'post_status' => 'publish',
+				'post_title'   => 'Multi Author Post',
+				'post_content' => 'Content for multi author test',
+				'post_status'  => 'publish',
 			)
 		);
 
-		// Simulate saving contributor metadata.
+		// simulate saving contributor metadata.
 		update_post_meta( $post_id, '_rtc_contributors', array( $user1->ID, $user2->ID ) );
 
 		$contributors = get_post_meta( $post_id, '_rtc_contributors', true );
@@ -47,42 +54,49 @@ class ContributorsTest extends WP_UnitTestCase {
 	 * Testing if contributors are displaying or not.
 	 */
 	public function test_contributors_output_contains_usernames() {
-		$user1   = $this->factory->user->create_and_get( array( 'role' => 'author' ) );
-		$post_id = $this->factory->post->create(
+		$user1   = $this->factory()->user->create_and_get( array( 'role' => 'author' ) );
+		$post_id = $this->factory()->post->create(
 			array(
-				'post_author' => $user1->ID,
-				'post_status' => 'publish',
-				'post_content'  => 'Content for multi author test',
+				'post_author'  => $user1->ID,
+				'post_status'  => 'publish',
+				'post_content' => 'Content for multi author test',
 			)
 		);
 
 		update_post_meta( $post_id, '_rtc_contributors', array( $user1->ID ) );
 
+		$this->go_to( get_permalink( $post_id ) );
 
-        global $post;
-        $post_obj = get_post( $post_id );
-        $post = $post_obj; 
-        
-        //Set up post data to simulate being "in the loop".
-        setup_postdata($post);
+		global $wp_query;
+		$wp_query->is_single   = true;
+		$wp_query->is_singular = true;
 
+		// Set up global post and post data.
+		global $post;
+		$post = get_post( $post_id );
+		setup_postdata( $post );
 
-        $this->go_to( get_permalink( $post_id ) );
+		$contributor = new TestableContributor();
+		add_filter( 'the_content', array( $contributor, 'display_contributor_list' ) );
 
-        $content = apply_filters( 'the_content', $post->post_content );
+		// Now apply the filter.
+		$content = apply_filters( 'the_content', $post->post_content );
 
-        $this->assertStringContainsString( 'Contributors', $content );
-        $this->assertStringContainsString( $user1->display_name, $content ); 
+		// Run assertions.
+		$this->assertStringContainsString( 'Contributors', $content );
+		$this->assertStringContainsString( $user1->display_name, $content );
 
-        wp_reset_postdata();
-
+		wp_reset_postdata();
 	}
 
-    public function tearDown(): void {
-        global $post;
-        $post = null;
-        wp_reset_postdata();
-        
-        parent::tearDown();
-    }
+	/**
+	 * Unit tests finished and tearing apart :P.
+	 */
+	public function tearDown(): void {
+		global $post;
+		$post = null;
+		wp_reset_postdata();
+
+		parent::tearDown();
+	}
 }
