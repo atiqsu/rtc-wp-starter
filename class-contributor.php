@@ -31,7 +31,7 @@ class Contributor {
 	 */
 	public function display_contributor_list( $content ) {
 
-		if ( ! is_single() || ! in_the_loop() || ! is_main_query() ) {
+		if ( ! $this->should_display_contributors() ) {
 			return $content;
 		}
 
@@ -82,5 +82,12 @@ class Contributor {
 		$contributors = get_post_meta( $post_id, Metabox::CONTRIBUTORS_META_KEY, true );
 
 		return is_array( $contributors ) ? array_map( 'intval', $contributors ) : array();
+	}
+
+	/**
+	 * Should we show contributor lists, this function will help us write clean unit testing as in_the_loop behaving strangely.
+	 */
+	protected function should_display_contributors() {
+		return is_single() && in_the_loop() && is_main_query();
 	}
 }
